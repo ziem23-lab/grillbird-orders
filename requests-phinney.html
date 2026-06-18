@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Requests - Phinney">
+<title>Requests - Phinney, Grillbird Phinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6EFE2; --card:#FCF7ED; --pepper:#2A2520; --pepper-soft:#7A7064;
+    --olive:#5F6E36; --olive-tint:#EAEFD7; --terracotta:#BD4F2B; --terracotta-dark:#9E4022;
+    --line:#E6DCC8; --shadow:0 1px 0 rgba(42,37,32,.04);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Karla',system-ui,sans-serif;background:var(--cream);color:var(--pepper);font-size:17px;line-height:1.4;padding-bottom:120px;}
+  .wrap{max-width:560px;margin:0 auto;padding:0 18px;}
+
+  header{padding:26px 0 14px;}
+  .back{display:inline-block;margin-bottom:12px;font-size:14px;color:var(--pepper-soft);text-decoration:none;}
+  .back:active{color:var(--pepper);}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--olive);font-weight:700;margin:0 0 4px;}
+  h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:46px;line-height:.92;letter-spacing:.01em;margin:0;color:var(--pepper);}
+  .lead{margin:10px 0 0;font-size:15px;color:var(--pepper-soft);line-height:1.45;}
+
+  .meta{display:flex;gap:12px;margin:18px 0 6px;flex-wrap:wrap;}
+  .field{flex:1 1 0;min-width:140px;}
+  .field label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pepper-soft);margin:0 0 5px;font-weight:700;}
+  .field input,.field select{width:100%;font-family:'Karla',sans-serif;font-size:16px;color:var(--pepper);padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--olive);}
+  .field select{
+    -webkit-appearance:none;appearance:none;cursor:pointer;padding-right:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237A7064' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px;
+  }
+  .field select:invalid{color:var(--pepper-soft);}
+
+  /* ---- Request cards ---- */
+  .req{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;box-shadow:var(--shadow);}
+  .req-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .req-num{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.06em;color:var(--olive);}
+  .req-del{background:none;border:none;color:var(--pepper-soft);font-family:'Karla',sans-serif;font-size:13px;text-decoration:underline;cursor:pointer;padding:4px;}
+  .req-del:active{color:var(--terracotta);}
+  .field.full{margin:0 0 10px;}
+  .meta.tight{gap:10px;margin:0 0 10px;}
+  .r-photo-wrap{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--pepper-soft);cursor:pointer;margin-top:2px;}
+  .r-photo-wrap input{width:18px;height:18px;accent-color:var(--olive);}
+
+  .addwrap{margin:14px 0 2px;}
+  .links{margin:16px 0 8px;text-align:center;}
+  .links button{background:none;border:none;color:var(--pepper-soft);font-family:'Karla',sans-serif;font-size:14px;text-decoration:underline;cursor:pointer;}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(246,239,226,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom));}
+  .bar-inner{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px;}
+  .count{flex:1 1 auto;font-size:14px;color:var(--pepper-soft);}
+  .count strong{color:var(--pepper);font-size:17px;font-weight:700;}
+  .btn{font-family:'Karla',sans-serif;font-weight:700;font-size:16px;cursor:pointer;border:none;border-radius:11px;padding:14px 20px;color:#fff;background:var(--terracotta);}
+  .btn:active{background:var(--terracotta-dark);}
+  .btn:disabled{background:#C9BEAA;opacity:.55;cursor:default;}
+  .btn-ghost{background:none;color:var(--pepper);border:1px solid var(--line);padding:14px 16px;font-weight:500;}
+  .btn-ghost:active{background:var(--card);}
+  .btn-add{width:100%;}
+
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--pepper);color:var(--cream);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">&lsaquo; All order pads</a>
+    <p class="kicker">Grillbird &middot; Phinney</p>
+    <h1>Requests - Phinney</h1>
+    <p class="lead">Flag anything you need reordered or bought that you can't grab yourself. Add as many as you want, mark how urgent each is, and it goes straight to Matt.</p>
+  </header>
+
+  <div class="meta">
+    <div class="field">
+      <label for="reqDate">Date</label>
+      <input type="date" id="reqDate">
+    </div>
+    <div class="field">
+      <label for="reqBy">Requested by</label>
+      <select id="reqBy" required>
+        <option value="" disabled selected hidden>Select name</option>
+        <option>Vlad</option>
+        <option>Isa</option>
+        <option>Val</option>
+        <option>Matt</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="addwrap">
+    <button id="addBtn" class="btn-ghost btn btn-add" type="button">+ Add another request</button>
+  </div>
+
+  <div class="links">
+    <button id="clearBtn">Clear all</button>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="count"><strong id="countNum">0</strong> <span id="countWord">requests</span></div>
+    <button class="btn-ghost btn" id="copyBtn" type="button" disabled>Copy</button>
+    <button class="btn" id="emailBtn" type="button" disabled>Email to Matt</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---- Put Matt's email between the quotes, then this pad is ready. ----
+  const RECIPIENT = "matt@grillbird.com";
+  const STORE = "Phinney";
+
+  const TYPES = ["Food / Ingredients","Packaging","Cleaning / Chemicals","Smallwares","Equipment / Repair","Office / Admin","Other"];
+  const listEl = document.getElementById('list');
+
+  const d = new Date();
+  document.getElementById('reqDate').value =
+    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  function cardHTML(){
+    const typeOpts = TYPES.map(t=>`<option>${t}</option>`).join('');
+    return `
+      <div class="req">
+        <div class="req-head">
+          <span class="req-num">Request</span>
+          <button class="req-del" type="button">Remove</button>
+        </div>
+        <div class="field full">
+          <label>What you need</label>
+          <input type="text" class="r-item" placeholder="e.g. large to-go bags">
+        </div>
+        <div class="meta tight">
+          <div class="field">
+            <label>How many / how much</label>
+            <input type="text" class="r-qty" placeholder="qty or size">
+          </div>
+          <div class="field">
+            <label>Urgency</label>
+            <select class="r-urg" required>
+              <option value="" disabled selected hidden>How urgent?</option>
+              <option value="3">Out now, blocking</option>
+              <option value="2">This week</option>
+              <option value="1">Soon, no rush</option>
+            </select>
+          </div>
+        </div>
+        <div class="meta tight">
+          <div class="field">
+            <label>Type</label>
+            <select class="r-type" required>
+              <option value="" disabled selected hidden>Pick type</option>
+              ${typeOpts}
+            </select>
+          </div>
+          <div class="field">
+            <label>Where to get it</label>
+            <input type="text" class="r-where" placeholder="vendor, store, or link">
+          </div>
+        </div>
+        <div class="field full">
+          <label>Note (optional)</label>
+          <input type="text" class="r-note" placeholder="anything Matt should know">
+        </div>
+        <label class="r-photo-wrap"><input type="checkbox" class="r-photo"> I'll attach a photo in Mail</label>
+      </div>`;
+  }
+
+  function addCard(){
+    const holder = document.createElement('div');
+    holder.innerHTML = cardHTML().trim();
+    listEl.appendChild(holder.firstChild);
+    renumber(); refresh();
+  }
+  function renumber(){
+    document.querySelectorAll('.req').forEach((c,i)=>{ c.querySelector('.req-num').textContent = 'Request ' + (i+1); });
+  }
+  function cards(){ return Array.from(document.querySelectorAll('.req')); }
+  function readCard(c){
+    const v = sel => (c.querySelector(sel).value || '').trim();
+    const urgSel = c.querySelector('.r-urg');
+    const typeSel = c.querySelector('.r-type');
+    return {
+      item: v('.r-item'),
+      qty: v('.r-qty'),
+      urg: parseInt(urgSel.value||'0',10),
+      urgLabel: urgSel.value ? urgSel.selectedOptions[0].text : '',
+      type: typeSel.value ? typeSel.selectedOptions[0].text : '',
+      where: v('.r-where'),
+      note: v('.r-note'),
+      photo: c.querySelector('.r-photo').checked
+    };
+  }
+  function validCards(){ return cards().map(readCard).filter(r=>r.item); }
+
+  function refresh(){
+    const n = validCards().length;
+    document.getElementById('countNum').textContent = n;
+    document.getElementById('countWord').textContent = n===1?'request':'requests';
+    document.getElementById('emailBtn').disabled = n===0;
+    document.getElementById('copyBtn').disabled = n===0;
+  }
+
+  listEl.addEventListener('input', refresh);
+  listEl.addEventListener('change', refresh);
+  listEl.addEventListener('click', e=>{
+    const del = e.target.closest('.req-del');
+    if(!del) return;
+    const card = del.closest('.req');
+    if(cards().length>1){ card.remove(); }
+    else {
+      card.querySelectorAll('input').forEach(i=>{ if(i.type==='checkbox') i.checked=false; else i.value=''; });
+      card.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+    }
+    renumber(); refresh();
+  });
+  document.getElementById('addBtn').addEventListener('click', addCard);
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    if(!validCards().length && cards().length<=1) return;
+    if(confirm('Clear all requests?')){ listEl.innerHTML=''; addCard(); }
+  });
+
+  function pretty(){
+    const dv = document.getElementById('reqDate').value;
+    return dv ? new Date(dv+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) : '';
+  }
+
+  function build(){
+    const by = document.getElementById('reqBy').value.trim();
+    const p = pretty();
+    let reqs = validCards();
+    reqs.sort((a,b)=> b.urg - a.urg);
+    const urgentCount = reqs.filter(r=>r.urg===3).length;
+
+    const lines = [];
+    lines.push('Grillbird, ' + STORE);
+    lines.push('Manager requests' + (p ? ', ' + p : ''));
+    if(by) lines.push('Requested by: ' + by);
+    lines.push('');
+
+    reqs.forEach((r,idx)=>{
+      const tag = r.urg===3 ? '[URGENT] ' : '';
+      lines.push((idx+1) + '. ' + tag + r.item);
+      if(r.qty)      lines.push('   How much: ' + r.qty);
+      if(r.urgLabel) lines.push('   Urgency: ' + r.urgLabel);
+      if(r.type)     lines.push('   Type: ' + r.type);
+      if(r.where)    lines.push('   Where: ' + r.where);
+      if(r.note)     lines.push('   Note: ' + r.note);
+      if(r.photo)    lines.push('   Photo: attaching in Mail');
+      lines.push('');
+    });
+
+    const s = reqs.length===1?'':'s';
+    let subject = 'Grillbird ' + STORE + ' requests, ' + reqs.length + ' item' + s;
+    if(urgentCount) subject += ' (' + urgentCount + ' urgent)';
+    if(p) subject += ', ' + p;
+
+    return {subject, body: lines.join('\n').trim()};
+  }
+
+  document.getElementById('emailBtn').addEventListener('click', ()=>{
+    if(RECIPIENT.indexOf('REPLACE_WITH') > -1){ toast("Add Matt's email to this pad first"); return; }
+    const {subject,body} = build();
+    window.location.href = `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{
+    const {subject,body} = build();
+    const text = `To: ${RECIPIENT}\nSubject: ${subject}\n\n${body}`;
+    try{ await navigator.clipboard.writeText(text); toast('Requests copied'); }
+    catch(err){
+      const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try{ document.execCommand('copy'); toast('Requests copied'); }
+      catch(e2){ toast('Copy failed, long-press to select'); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  let toastTimer;
+  function toast(msg){
+    const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1800);
+  }
+
+  addCard();
+</script>
+</body>
+</html>
