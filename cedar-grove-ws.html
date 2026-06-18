@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Packaging - WS">
+<title>Packaging - WS, Grillbird West Seattle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6EFE2;        /* warm paper */
+    --card:#FCF7ED;         /* lighter card surface */
+    --pepper:#2A2520;       /* warm near-black */
+    --pepper-soft:#7A7064;  /* muted subtitle */
+    --olive:#5F6E36;        /* herb / olive natural */
+    --olive-tint:#EAEFD7;   /* selected-row wash */
+    --terracotta:#BD4F2B;   /* heirloom / brick accent */
+    --terracotta-dark:#9E4022;
+    --line:#E6DCC8;         /* warm divider */
+    --shadow:0 1px 0 rgba(42,37,32,.04);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Karla',system-ui,sans-serif;
+    background:var(--cream);
+    color:var(--pepper);
+    font-size:17px;
+    line-height:1.4;
+    padding-bottom:120px; /* room for sticky bar */
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 18px;}
+
+  /* ---- Masthead ---- */
+  header{padding:26px 0 14px;}
+  .back{display:inline-block;margin-bottom:12px;font-size:14px;color:var(--pepper-soft);text-decoration:none;}
+  .back:active{color:var(--pepper);}
+  .kicker{
+    font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--olive);font-weight:700;margin:0 0 4px;
+  }
+  h1{
+    font-family:'Bebas Neue',sans-serif;font-weight:400;
+    font-size:46px;line-height:.92;letter-spacing:.01em;
+    margin:0;color:var(--pepper);
+  }
+  .vendor{margin:10px 0 0;font-size:15px;color:var(--pepper-soft);}
+  .vendor a{color:var(--pepper);text-decoration:none;border-bottom:1px solid var(--line);}
+  .cutoff{
+    margin:14px 0 0;padding:10px 14px;border-radius:10px;
+    background:var(--olive-tint);border:1px solid #D9E0BE;
+    font-size:14px;color:#46521f;
+  }
+  .cutoff strong{font-weight:700;}
+
+  /* ---- Meta row ---- */
+  .meta{display:flex;gap:12px;margin:18px 0 6px;flex-wrap:wrap;}
+  .field{flex:1 1 0;min-width:140px;}
+  .field label{
+    display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--pepper-soft);margin:0 0 5px;font-weight:700;
+  }
+  .field input,.field select{
+    width:100%;font-family:'Karla',sans-serif;font-size:16px;color:var(--pepper);
+    padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+  }
+  .field input:focus,.field select:focus{outline:none;border-color:var(--olive);}
+  .field select{
+    -webkit-appearance:none;appearance:none;cursor:pointer;padding-right:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237A7064' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px;
+  }
+  .field select:invalid{color:var(--pepper-soft);}
+
+  .search input{
+    width:100%;font-family:'Karla',sans-serif;font-size:16px;
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+    margin:8px 0 4px;
+  }
+  .search input:focus{outline:none;border-color:var(--olive);}
+
+  /* ---- Category groups ---- */
+  .cat{margin:22px 0 2px;}
+  .cat h2{
+    font-family:'Bebas Neue',sans-serif;font-weight:400;
+    font-size:22px;letter-spacing:.08em;color:var(--olive);
+    margin:0 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line);
+  }
+
+  /* ---- Item rows ---- */
+  .item{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 12px;margin:7px 0;border-radius:12px;
+    background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);
+    transition:background .12s,border-color .12s;
+  }
+  .item.has-qty{background:var(--olive-tint);border-color:#CBD6A0;}
+  .item-info{flex:1 1 auto;min-width:0;}
+  .item-name{font-weight:700;font-size:16px;color:var(--pepper);}
+  .item-sub{font-size:13px;color:var(--pepper-soft);margin-top:1px;}
+  .item-note{
+    display:inline-block;margin-top:4px;font-size:12px;font-style:italic;
+    color:#7c4a2a;background:#F4E4D6;border-radius:6px;padding:1px 8px;
+  }
+
+  /* ---- Stepper ---- */
+  .stepper{display:flex;align-items:center;gap:0;flex:0 0 auto;}
+  .step{
+    width:42px;height:42px;border:1px solid var(--line);background:var(--cream);
+    font-size:24px;line-height:1;color:var(--pepper);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    user-select:none;font-family:'Karla',sans-serif;
+  }
+  .step:active{background:var(--olive-tint);}
+  .step.minus{border-radius:10px 0 0 10px;}
+  .step.plus{border-radius:0 10px 10px 0;}
+  .qty{
+    width:48px;height:42px;text-align:center;font-size:17px;font-weight:700;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    border-left:none;border-right:none;background:#fff;color:var(--pepper);
+    font-family:'Karla',sans-serif;-moz-appearance:textfield;
+  }
+  .qty::-webkit-outer-spin-button,.qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .qty:focus{outline:none;}
+
+  .empty-note{color:var(--pepper-soft);font-style:italic;padding:24px 4px;text-align:center;}
+
+  /* ---- Sticky action bar ---- */
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;
+    background:rgba(246,239,226,.96);backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);
+    padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+  }
+  .bar-inner{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px;}
+  .count{flex:1 1 auto;font-size:14px;color:var(--pepper-soft);}
+  .count strong{color:var(--pepper);font-size:17px;font-weight:700;}
+  .btn{
+    font-family:'Karla',sans-serif;font-weight:700;font-size:16px;cursor:pointer;
+    border:none;border-radius:11px;padding:14px 20px;color:#fff;background:var(--terracotta);
+  }
+  .btn:active{background:var(--terracotta-dark);}
+  .btn:disabled{background:#C9BEAA;opacity:.55;cursor:default;}
+  .btn-ghost{
+    background:none;color:var(--pepper);border:1px solid var(--line);
+    padding:14px 16px;font-weight:500;
+  }
+  .btn-ghost:active{background:var(--card);}
+
+  .links{margin:18px 0 8px;text-align:center;}
+  .links button{
+    background:none;border:none;color:var(--pepper-soft);font-family:'Karla',sans-serif;
+    font-size:14px;text-decoration:underline;cursor:pointer;
+  }
+
+  /* ---- Special items / notes ---- */
+  .notes-field{margin:26px 0 4px;}
+  .notes-field label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pepper-soft);margin:0 0 6px;font-weight:700;}
+  .notes-field textarea{width:100%;font-family:'Karla',sans-serif;font-size:16px;line-height:1.4;color:var(--pepper);padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);resize:vertical;}
+  .notes-field textarea:focus{outline:none;border-color:var(--olive);}
+
+  /* ---- Toast ---- */
+  .toast{
+    position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);
+    background:var(--pepper);color:var(--cream);padding:11px 18px;border-radius:10px;
+    font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">‹ All order pads</a>
+    <p class="kicker">Grillbird · West Seattle</p>
+    <h1>Packaging - WS</h1>
+    <p class="vendor">
+      <a href="mailto:ryand@cgcompost.com">ryand@cgcompost.com</a>
+    </p>
+    <div class="cutoff">Order cutoff and delivery: <strong>TBD</strong>.</div>
+  </header>
+
+  <div class="meta">
+    <div class="field">
+      <label for="orderDate">Order date</label>
+      <input type="date" id="orderDate">
+    </div>
+    <div class="field">
+      <label for="orderedBy">Ordered by</label>
+      <select id="orderedBy" required>
+        <option value="" disabled selected hidden>Select name</option>
+        <option>Vlad</option>
+        <option>Isa</option>
+        <option>Val</option>
+        <option>Matt</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="search">
+    <input type="search" id="search" placeholder="Jump to an item…" autocomplete="off">
+  </div>
+
+  <div id="list"></div>
+
+  <div class="notes-field">
+    <label for="extra">Special items &amp; notes</label>
+    <textarea id="extra" rows="3" placeholder="Anything not on the list: special requests, substitutions, or a note for Cedar Grove."></textarea>
+  </div>
+
+  <div class="links">
+    <button id="clearBtn">Clear order</button>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="count"><strong id="countNum">0</strong> <span id="countWord">items</span></div>
+    <button class="btn-ghost btn" id="copyBtn" type="button">Copy</button>
+    <button class="btn" id="emailBtn" type="button" disabled>Email order</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---- The order guide. Edit this list when items change. ----
+  const VENDOR_EMAIL = "ryand@cgcompost.com";
+  const ITEMS = [
+    {cat:"Trays & Lids", name:"9\" 3-Comp Square Tray (Fineline)", unit:"200/case", note:""},
+    {cat:"Trays & Lids", name:"9\" Square 3-Comp Lid (Fineline)", unit:"200/case", note:""},
+    {cat:"Trays & Lids", name:"Kids 3-Comp Fiber Tray, 10x7.5x1.5 (29 oz)", unit:"400/CS", note:""},
+    {cat:"Trays & Lids", name:"Kids Fiber Tray Lid (flat, fits 10x7.5)", unit:"400/CS", note:""},
+
+    {cat:"Bowls & Lids", name:"32 oz Fiber Bowl, round", unit:"500/CS", note:""},
+    {cat:"Bowls & Lids", name:"Fiber Bowl Lid (fits 16-32 oz)", unit:"400/CS", note:""},
+
+    {cat:"Deli & Specialty", name:"6x6x3 Fiber Hinged Clamshell", unit:"500/CS", note:"Confirm SKU"},
+    {cat:"Deli & Specialty", name:"Hoagie Molded Fiber, 9x6", unit:"250/CS", note:"Confirm not bagasse"},
+    {cat:"Deli & Specialty", name:"8 oz Paper Deli + Lid Combo", unit:"1000/CS (combo)", note:""},
+    {cat:"Deli & Specialty", name:"16 oz Paper Deli + Lid Combo", unit:"Combo", note:"Confirm pack"},
+    {cat:"Deli & Specialty", name:"32 oz Laminated Fiber Container, 8.7x6.7x2.1", unit:"400/CS", note:"Confirm SKU"},
+    {cat:"Deli & Specialty", name:"32 oz Laminated Fiber Lid", unit:"400/CS", note:"Confirm SKU"},
+    {cat:"Deli & Specialty", name:"60 oz Fiber Container", unit:"400/CS", note:""},
+
+    {cat:"Portion Cups", name:"2 oz Green Portion Cup", unit:"CS", note:""},
+    {cat:"Portion Cups", name:"2 oz Green Portion Cup Lid", unit:"CS", note:""},
+    {cat:"Portion Cups", name:"4 oz Portion Cup, Brown", unit:"CS, 2000 ct", note:""},
+    {cat:"Portion Cups", name:"4 oz Portion Cup Lid, Green", unit:"CS, 2000 ct", note:""},
+
+    {cat:"Cutlery", name:"Wrapped Fork, compostable", unit:"1000/CS", note:""},
+
+    {cat:"Can Liners", name:"Compostable Can Liners, 35x44", unit:"Case", note:"45 gal spec TBD"},
+  ];
+  const CAT_ORDER = ["Trays & Lids","Bowls & Lids","Deli & Specialty","Portion Cups","Cutlery","Can Liners"];
+
+  // ---- State ----
+  const qty = {}; // index -> number
+  const listEl = document.getElementById('list');
+
+  // Default date = today (local)
+  const d = new Date();
+  document.getElementById('orderDate').value =
+    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  // ---- Render ----
+  function render(){
+    listEl.innerHTML = '';
+    CAT_ORDER.forEach(cat=>{
+      const rows = ITEMS.map((it,i)=>({it,i})).filter(x=>x.it.cat===cat);
+      if(!rows.length) return;
+      const sec = document.createElement('div');
+      sec.className = 'cat';
+      sec.dataset.cat = cat;
+      sec.innerHTML = `<h2>${cat}</h2>`;
+      rows.forEach(({it,i})=>{
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.dataset.idx = i;
+        row.dataset.search = (it.name+' '+it.unit+' '+it.note).toLowerCase();
+        row.innerHTML = `
+          <div class="item-info">
+            <div class="item-name">${it.name}</div>
+            <div class="item-sub">${it.unit}</div>
+            ${it.note ? `<span class="item-note">${it.note}</span>` : ``}
+          </div>
+          <div class="stepper">
+            <div class="step minus" data-i="${i}" aria-label="decrease">–</div>
+            <input class="qty" type="number" inputmode="numeric" min="0" data-i="${i}"
+                   value="${qty[i]||''}" placeholder="0" aria-label="${it.name} quantity">
+            <div class="step plus" data-i="${i}" aria-label="increase">+</div>
+          </div>`;
+        sec.appendChild(row);
+      });
+      listEl.appendChild(sec);
+    });
+    refreshRows();
+  }
+
+  function setQty(i,v){
+    v = Math.max(0, parseInt(v,10) || 0);
+    if(v===0){ delete qty[i]; } else { qty[i]=v; }
+  }
+
+  function refreshRows(){
+    document.querySelectorAll('.item').forEach(row=>{
+      const i = row.dataset.idx;
+      row.classList.toggle('has-qty', !!qty[i]);
+    });
+    const n = Object.values(qty).reduce((a,b)=>a+(b>0?1:0),0);
+    document.getElementById('countNum').textContent = n;
+    document.getElementById('countWord').textContent = n===1?'item':'items';
+    const hasExtra = document.getElementById('extra').value.trim().length>0;
+    const canSend = n>0 || hasExtra;
+    document.getElementById('emailBtn').disabled = !canSend;
+    document.getElementById('copyBtn').disabled = !canSend;
+  }
+
+  // ---- Events (delegated) ----
+  listEl.addEventListener('click', e=>{
+    const step = e.target.closest('.step');
+    if(!step) return;
+    const i = step.dataset.i;
+    const cur = qty[i]||0;
+    setQty(i, step.classList.contains('plus') ? cur+1 : cur-1);
+    const input = listEl.querySelector(`.qty[data-i="${i}"]`);
+    if(input) input.value = qty[i]||'';
+    refreshRows();
+  });
+  listEl.addEventListener('input', e=>{
+    if(!e.target.classList.contains('qty')) return;
+    setQty(e.target.dataset.i, e.target.value);
+    refreshRows();
+  });
+
+  // ---- Search filter ----
+  document.getElementById('search').addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('.cat').forEach(sec=>{
+      let visible = 0;
+      sec.querySelectorAll('.item').forEach(row=>{
+        const match = !q || row.dataset.search.includes(q);
+        row.style.display = match ? '' : 'none';
+        if(match) visible++;
+      });
+      sec.style.display = visible ? '' : 'none';
+    });
+  });
+
+  // ---- Notes box: update send state as it's typed ----
+  document.getElementById('extra').addEventListener('input', refreshRows);
+
+  // ---- Clear ----
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    const hasExtra = document.getElementById('extra').value.trim().length>0;
+    if(!Object.keys(qty).length && !hasExtra) return;
+    if(confirm('Clear this order?')){
+      for(const k in qty) delete qty[k];
+      document.querySelectorAll('.qty').forEach(el=>el.value='');
+      document.getElementById('extra').value='';
+      refreshRows();
+    }
+  });
+
+  // ---- Build the order text ----
+  function buildOrder(){
+    const dateVal = document.getElementById('orderDate').value;
+    const pretty = dateVal ? new Date(dateVal+'T00:00:00')
+      .toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) : '';
+    const by = document.getElementById('orderedBy').value.trim();
+
+    const lines = [];
+    lines.push('Grillbird, West Seattle');
+    lines.push('Cedar Grove packaging order' + (pretty ? ', ' + pretty : ''));
+    if(by) lines.push('Ordered by: ' + by);
+    lines.push('');
+
+    CAT_ORDER.forEach(cat=>{
+      const rows = ITEMS.map((it,i)=>({it,i})).filter(x=>x.it.cat===cat && qty[x.i]>0);
+      if(!rows.length) return;
+      lines.push(cat.toUpperCase());
+      rows.forEach(({it,i})=>{
+        let line = `  ${qty[i]} × ${it.name}, ${it.unit}`;
+        if(it.note) line += ` (${it.note})`;
+        lines.push(line);
+      });
+      lines.push('');
+    });
+
+    const extra = document.getElementById('extra').value.trim();
+    if(extra){
+      lines.push('SPECIAL ITEMS / NOTES');
+      extra.split('\n').forEach(l=>lines.push('  ' + l));
+      lines.push('');
+    }
+
+    lines.push('Thank you!');
+
+    const subject = 'Grillbird West Seattle, Cedar Grove Packaging order' + (pretty ? ', ' + pretty : '');
+    return {subject, body:lines.join('\n').trim()};
+  }
+
+  // ---- Email ----
+  document.getElementById('emailBtn').addEventListener('click', ()=>{
+    const {subject,body} = buildOrder();
+    const url = `mailto:${VENDOR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
+  });
+
+  // ---- Copy fallback ----
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{
+    const {subject,body} = buildOrder();
+    const text = `To: ${VENDOR_EMAIL}\nSubject: ${subject}\n\n${body}`;
+    try{
+      await navigator.clipboard.writeText(text);
+      toast('Order copied');
+    }catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try{ document.execCommand('copy'); toast('Order copied'); }
+      catch(e2){ toast('Copy failed, long-press to select'); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 1800);
+  }
+
+  render();
+</script>
+</body>
+</html>
