@@ -44,6 +44,9 @@
 
   .empty{color:var(--pepper-soft);font-style:italic;padding:30px 4px;text-align:center;}
   footer{margin:28px 0 0;font-size:13px;color:var(--pepper-soft);text-align:center;line-height:1.5;}
+  .update-row{margin:10px 0 0;display:flex;align-items:center;justify-content:center;gap:10px;}
+  .build-ts{font-size:12px;color:var(--pepper-soft);}
+  .update-btn{font-family:'Karla',sans-serif;font-size:12px;color:var(--olive);background:none;border:1px solid var(--olive);border-radius:6px;padding:3px 10px;cursor:pointer;}
 
   .filter-row{margin:20px 0 4px;}
   .filter-row label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pepper-soft);font-weight:700;margin-bottom:6px;}
@@ -76,7 +79,13 @@
 
   <div class="list" id="list"></div>
 
-  <footer>Add this page to your home screen for one-tap access.</footer>
+  <footer>
+    Add this page to your home screen for one-tap access.
+    <div class="update-row">
+      <span class="build-ts" id="buildTs"></span>
+      <button class="update-btn" id="updateBtn">Check for update</button>
+    </div>
+  </footer>
 </div>
 
 <script>
@@ -118,6 +127,40 @@
 
   storeFilter.addEventListener('change', renderList);
   renderList();
+
+  // ---- Build timestamp ----
+  const BUILD = "2026-06-18 11:10";
+  document.getElementById('buildTs').textContent = "Built " + BUILD;
+
+  // ---- Service worker + update button ----
+  const updateBtn = document.getElementById('updateBtn');
+  if ("serviceWorker" in navigator) {
+    let swReg;
+    navigator.serviceWorker.register("/grillbird-orders/sw.js").then(reg => {
+      swReg = reg;
+      reg.addEventListener("updatefound", () => {
+        const w = reg.installing;
+        w.addEventListener("statechange", () => {
+          if (w.state === "installed" && navigator.serviceWorker.controller) {
+            location.reload();
+          }
+        });
+      });
+    });
+    navigator.serviceWorker.addEventListener("controllerchange", () => location.reload());
+
+    updateBtn.addEventListener("click", () => {
+      updateBtn.textContent = "Checking…";
+      (swReg ? Promise.resolve(swReg) : navigator.serviceWorker.ready)
+        .then(reg => reg.update())
+        .then(() => {
+          updateBtn.textContent = "Up to date";
+          setTimeout(() => { updateBtn.textContent = "Check for update"; }, 2500);
+        });
+    });
+  } else {
+    updateBtn.style.display = "none";
+  }
 </script>
-<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/grillbird-orders/sw.js").then(r=>{r.addEventListener("updatefound",()=>{const w=r.installing;w.addEventListener("statechange",()=>{if(w.state==="installed"</body></body>navigator.serviceWorker.controller)location.reload();});});});navigator.serviceWorker.addEventListener("controllerchange",()=>location.reload());}</script></body>
+</body>
 </html>
