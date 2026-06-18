@@ -44,6 +44,17 @@
 
   .empty{color:var(--pepper-soft);font-style:italic;padding:30px 4px;text-align:center;}
   footer{margin:28px 0 0;font-size:13px;color:var(--pepper-soft);text-align:center;line-height:1.5;}
+
+  .filter-row{margin:20px 0 4px;}
+  .filter-row label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pepper-soft);font-weight:700;margin-bottom:6px;}
+  .filter-row select{
+    width:100%;font-family:'Karla',sans-serif;font-size:16px;color:var(--pepper);
+    padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+    -webkit-appearance:none;appearance:none;cursor:pointer;padding-right:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237A7064' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px;
+  }
+  .filter-row select:focus{outline:none;border-color:var(--olive);}
 </style>
 </head>
 <body>
@@ -54,6 +65,15 @@
     <p class="sub">Tap a vendor to build and send an order.</p>
   </header>
 
+  <div class="filter-row">
+    <label for="storeFilter">Store</label>
+    <select id="storeFilter">
+      <option value="all">All stores</option>
+      <option value="ws">West Seattle</option>
+      <option value="phinney">Phinney Ridge</option>
+    </select>
+  </div>
+
   <div class="list" id="list"></div>
 
   <footer>Add this page to your home screen for one-tap access.</footer>
@@ -62,32 +82,42 @@
 <script>
   // ---- Vendor pads. Add a vendor: drop in its HTML file, then add a line here. ----
   const VENDORS = [
-    { name:"SK Produce", tag:"Produce · Phinney", note:"Order by 7 AM for same-day delivery", file:"sk-produce.html" },
-    { name:"SK Produce", tag:"Produce · West Seattle", note:"Order by 7 AM for same-day delivery", file:"sk-produce-ws.html" },
-    { name:"Packaging - WS", tag:"Cedar Grove", note:"Order cutoff TBD", file:"cedar-grove-ws.html" },
-    { name:"Packaging - Phinney", tag:"Cedar Grove", note:"Order cutoff TBD", file:"cedar-grove-phinney.html" },
-    { name:"Requests - WS", tag:"Sends to Matt", note:"Reorders & purchases", file:"requests-ws.html" },
-    { name:"Requests - Phinney", tag:"Sends to Matt", note:"Reorders & purchases", file:"requests-phinney.html" },
+    { name:"SK Produce", tag:"Produce · Phinney", note:"Order by 7 AM for same-day delivery", file:"sk-produce.html", store:"phinney" },
+    { name:"SK Produce", tag:"Produce · West Seattle", note:"Order by 7 AM for same-day delivery", file:"sk-produce-ws.html", store:"ws" },
+    { name:"Packaging - WS", tag:"Cedar Grove", note:"Order cutoff TBD", file:"cedar-grove-ws.html", store:"ws" },
+    { name:"Packaging - Phinney", tag:"Cedar Grove", note:"Order cutoff TBD", file:"cedar-grove-phinney.html", store:"phinney" },
+    { name:"Requests - WS", tag:"Sends to Matt", note:"Reorders & purchases", file:"requests-ws.html", store:"ws" },
+    { name:"Requests - Phinney", tag:"Sends to Matt", note:"Reorders & purchases", file:"requests-phinney.html", store:"phinney" },
   ];
 
   const list = document.getElementById('list');
-  if(!VENDORS.length){
-    list.innerHTML = '<div class="empty">No order pads yet.</div>';
-  } else {
-    VENDORS.forEach(v=>{
-      const a = document.createElement('a');
-      a.className = 'card';
-      a.href = v.file;
-      a.innerHTML = `
-        <div class="card-main">
-          <div class="card-name">${v.name}</div>
-          <div class="card-tag">${v.tag}</div>
-          ${v.note ? `<div class="card-note">${v.note}</div>` : ``}
-        </div>
-        <div class="chev">›</div>`;
-      list.appendChild(a);
-    });
+  const storeFilter = document.getElementById('storeFilter');
+
+  function renderList() {
+    const sel = storeFilter.value;
+    const filtered = sel === 'all' ? VENDORS : VENDORS.filter(v => v.store === sel);
+    list.innerHTML = '';
+    if(!filtered.length){
+      list.innerHTML = '<div class="empty">No order pads for this store.</div>';
+    } else {
+      filtered.forEach(v=>{
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = v.file;
+        a.innerHTML = `
+          <div class="card-main">
+            <div class="card-name">${v.name}</div>
+            <div class="card-tag">${v.tag}</div>
+            ${v.note ? `<div class="card-note">${v.note}</div>` : ``}
+          </div>
+          <div class="chev">›</div>`;
+        list.appendChild(a);
+      });
+    }
   }
+
+  storeFilter.addEventListener('change', renderList);
+  renderList();
 </script>
 </body>
 </html>
