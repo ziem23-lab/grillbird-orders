@@ -366,6 +366,16 @@
     }
   });
 
+  const PACK_WORDS = ["Case","Bag","Bunch","Each","Box","Flat","Carton","Sack","Tray","Bottle","Jug","Crate","Lug","Pack","Dozen"];
+  function splitPack(unit){
+    const u = (unit || "").trim();
+    for(const p of PACK_WORDS){
+      const re = new RegExp("^" + p + "\\b[ ,]*", "i");
+      if(re.test(u)) return { pack: p, size: u.replace(re, "").trim() };
+    }
+    return { pack: "", size: u };
+  }
+
   // ---- Build the order text ----
   function buildOrder(){
     const dateVal = document.getElementById('orderDate').value;
@@ -384,7 +394,8 @@
       if(!rows.length) return;
       lines.push(cat.toUpperCase());
       rows.forEach(({it,i})=>{
-        let line = `  ${qty[i]} × ${it.name} — ${it.unit}`;
+        const { pack, size } = splitPack(it.unit);
+        let line = `  ${qty[i]} ${pack ? pack + " " : ""}× ${it.name}${size ? ", " + size : ""}`;
         if(it.note) line += ` (${it.note})`;
         lines.push(line);
       });
