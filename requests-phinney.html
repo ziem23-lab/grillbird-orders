@@ -265,7 +265,7 @@
     if(urgentCount) subject += ' (' + urgentCount + ' urgent)';
     if(p) subject += ', ' + p;
 
-    return {subject, body: lines.join('\n').trim()};
+    return {subject, body: lines.join('\r\n').trim()};
   }
 
   document.getElementById('emailBtn').addEventListener('click', ()=>{

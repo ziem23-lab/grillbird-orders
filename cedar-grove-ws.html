@@ -384,7 +384,7 @@
       if(!rows.length) return;
       lines.push(cat.toUpperCase());
       rows.forEach(({it,i})=>{
-        let line = `  ${qty[i]} × ${it.name}, ${it.unit}`;
+        let line = `• ${qty[i]} × ${it.name}, ${it.unit}`;
         if(it.note) line += ` (${it.note})`;
         lines.push(line);
       });
@@ -401,7 +401,7 @@
     lines.push('Thank you!');
 
     const subject = 'Grillbird West Seattle, Cedar Grove Packaging order' + (pretty ? ', ' + pretty : '');
-    return {subject, body:lines.join('\n').trim()};
+    return {subject, body:lines.join('\r\n').trim()};
   }
 
   // ---- Email ----
