@@ -229,34 +229,36 @@
 
 <script>
   // ---- The order guide. Edit this list when items change. ----
+  // sku + name are Cedar Grove's own item # and description (from SO001444).
+  // Items with no sku are not on a Cedar Grove sales order yet. alias is staff-facing only.
   const VENDOR_EMAIL = "ryand@cgcompost.com";
   const ITEMS = [
-    {cat:"Trays & Lids", name:"9\" 3-Comp Square Tray (Fineline)", unit:"200/case", note:""},
-    {cat:"Trays & Lids", name:"9\" Square 3-Comp Lid (Fineline)", unit:"200/case", note:""},
-    {cat:"Trays & Lids", name:"Kids 3-Comp Fiber Tray, 10x7.5x1.5 (29 oz)", unit:"400/CS", note:""},
-    {cat:"Trays & Lids", name:"Kids Fiber Tray Lid (flat, fits 10x7.5)", unit:"400/CS", note:""},
+    {cat:"Trays & Lids", sku:"4320750", name:"9\" 3 CMPT Square Tray Molded Fiber", unit:"200/case", alias:"3-comp square tray"},
+    {cat:"Trays & Lids", sku:"4320850", name:"9\" Square 3 CMPT Flat PET Lid", unit:"200/case", alias:"3-comp square tray lid"},
+    {cat:"Trays & Lids", sku:"4323020", name:"Fiber Container, 3-Compt 10x7.5x1.5\"", unit:"400/CS", alias:"Kids tray"},
+    {cat:"Trays & Lids", sku:"", name:"Kids Fiber Tray Lid (flat, fits 10x7.5)", unit:"400/CS", alias:""},
 
-    {cat:"Bowls & Lids", name:"32 oz Fiber Bowl, round", unit:"500/CS", note:""},
-    {cat:"Bowls & Lids", name:"Fiber Bowl Lid (fits 16-32 oz)", unit:"400/CS", note:""},
-    {cat:"Bowls & Lids", name:"32 oz Fiber Square Bowl", unit:"400/CS", note:""},
-    {cat:"Bowls & Lids", name:"Square Bowl Lid (fits 24-48 oz)", unit:"400/CS", note:""},
+    {cat:"Bowls & Lids", sku:"4323000", name:"FIBER BOWL 32oz", unit:"500/CS", alias:"32 oz round bowl"},
+    {cat:"Bowls & Lids", sku:"4323005", name:"Fiber Lid - 16-32 oz Fiber Bowl", unit:"400/CS", alias:"Round bowl lid"},
+    {cat:"Bowls & Lids", sku:"", name:"32 oz Fiber Square Bowl", unit:"400/CS", alias:""},
+    {cat:"Bowls & Lids", sku:"4323015", name:"Fiber Lid - 24-48oz Square Bowls", unit:"400/CS", alias:"Square bowl lid"},
 
-    {cat:"Deli & Specialty", name:"6x6x3 Fiber Hinged Clamshell", unit:"500/CS", note:"Confirm SKU"},
-    {cat:"Deli & Specialty", name:"Hoagie Molded Fiber, 9x6", unit:"250/CS", note:"Confirm not bagasse"},
-    {cat:"Deli & Specialty", name:"8 oz Paper Deli + Lid Combo", unit:"1000/CS (combo)", note:""},
-    {cat:"Deli & Specialty", name:"16 oz Paper Deli + Lid Combo", unit:"Combo", note:"Confirm pack"},
-    {cat:"Deli & Specialty", name:"32 oz Laminated Fiber Container, 8.7x6.7x2.1", unit:"400/CS", note:"Confirm SKU"},
-    {cat:"Deli & Specialty", name:"32 oz Laminated Fiber Lid", unit:"400/CS", note:"Confirm SKU"},
-    {cat:"Deli & Specialty", name:"60 oz Fiber Container", unit:"400/CS", note:""},
+    {cat:"Deli & Specialty", sku:"4321950", name:"Cedar Grove 6x6 Hinged Molded Fiber Container", unit:"500/CS", alias:"6x6 clamshell"},
+    {cat:"Deli & Specialty", sku:"4322050", name:"Cedar Grove 9x6 Hinged Molded Fiber Container", unit:"250/CS", alias:"Hoagie"},
+    {cat:"Deli & Specialty", sku:"", name:"8 oz Paper Deli + Lid Combo", unit:"1000/CS (combo)", alias:""},
+    {cat:"Deli & Specialty", sku:"", name:"16 oz Paper Deli + Lid Combo", unit:"Combo", alias:""},
+    {cat:"Deli & Specialty", sku:"4323030", name:"Fiber Catering Pan Laminated 30z", unit:"400/CS", alias:"Laminated container"},
+    {cat:"Deli & Specialty", sku:"4323035", name:"Lid (Fiber), Catering Pan Laminated 20-44oz", unit:"400/CS", alias:"Laminated container lid"},
+    {cat:"Deli & Specialty", sku:"", name:"60 oz Fiber Container", unit:"400/CS", alias:""},
 
-    {cat:"Portion Cups", name:"2 oz Green Portion Cup", unit:"CS", note:""},
-    {cat:"Portion Cups", name:"2 oz Green Portion Cup Lid", unit:"CS", note:""},
-    {cat:"Portion Cups", name:"4 oz Portion Cup, Brown", unit:"CS, 2000 ct", note:""},
-    {cat:"Portion Cups", name:"4 oz Portion Cup Lid, Green", unit:"CS, 2000 ct", note:""},
+    {cat:"Portion Cups", sku:"4392450", name:"Cedar Grove 2oz Portion Cup Compostable", unit:"CS", alias:"2 oz cup"},
+    {cat:"Portion Cups", sku:"4391650", name:"Cedar Grove 2 oz PLA Portion Cup Lid Compostable", unit:"CS", alias:"2 oz cup lid"},
+    {cat:"Portion Cups", sku:"", name:"4 oz Portion Cup, Brown", unit:"CS, 2000 ct", alias:""},
+    {cat:"Portion Cups", sku:"", name:"4 oz Portion Cup Lid, Green", unit:"CS, 2000 ct", alias:""},
 
-    {cat:"Cutlery", name:"Wrapped Fork, compostable", unit:"1000/CS", note:""},
+    {cat:"Cutlery", sku:"4360050", name:"Cedar Grove CPLA Compostable Cutlery Heavy Weight 6.5\" Fork-Individually Wrapped", unit:"1000/CS", alias:"Wrapped fork"},
 
-    {cat:"Can Liners", name:"Compostable Can Liners, 35x44", unit:"Case", note:"45 gal spec TBD"},
+    {cat:"Can Liners", sku:"4200340", name:"Cedar Grove 45 Gallon 33X48 Compostable Can Liner", unit:"Case", alias:"Can liners"},
   ];
   const CAT_ORDER = ["Trays & Lids","Bowls & Lids","Deli & Specialty","Portion Cups","Cutlery","Can Liners"];
 
@@ -283,12 +285,11 @@
         const row = document.createElement('div');
         row.className = 'item';
         row.dataset.idx = i;
-        row.dataset.search = (it.name+' '+it.unit+' '+it.note).toLowerCase();
+        row.dataset.search = (it.sku+' '+it.name+' '+it.unit+' '+it.alias).toLowerCase();
         row.innerHTML = `
           <div class="item-info">
             <div class="item-name">${it.name}</div>
-            <div class="item-sub">${it.unit}</div>
-            ${it.note ? `<span class="item-note">${it.note}</span>` : ``}
+            <div class="item-sub">${it.sku ? `#${it.sku} · ` : ``}${it.unit}${it.alias ? ` · ${it.alias}` : ``}</div>
           </div>
           <div class="stepper">
             <div class="step minus" data-i="${i}" aria-label="decrease">–</div>
@@ -376,7 +377,7 @@
     const by = document.getElementById('orderedBy').value.trim();
 
     const lines = [];
-    lines.push('Grillbird, Phinney');
+    lines.push('GRILLBIRD GREENWOOD (Phinney Ridge)');
     lines.push('Cedar Grove packaging order' + (pretty ? ', ' + pretty : ''));
     if(by) lines.push('Ordered by: ' + by);
     lines.push('');
@@ -386,9 +387,9 @@
       if(!rows.length) return;
       lines.push(cat.toUpperCase());
       rows.forEach(({it,i})=>{
-        let line = `• ${qty[i]} × ${it.name}, ${it.unit}`;
-        if(it.note) line += ` (${it.note})`;
-        lines.push(line);
+        lines.push(it.sku
+          ? `• ${it.sku}  ${it.name}  |  ${qty[i]} CASE`
+          : `• (no item #)  ${it.name}, ${it.unit}  |  ${qty[i]} CASE`);
       });
       lines.push('');
     });
